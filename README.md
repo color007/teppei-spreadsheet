@@ -1,37 +1,101 @@
-## Welcome to GitHub Pages
+/*
+How to use:
+1)Create new file.
+2)
+*/
 
-You can use the [editor on GitHub](https://github.com/color007/teppei-spreadsheet/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+function kana2upper(string) {
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+	var arrayedString = string.split('');
+	var value = '';
 
-### Markdown
+	var triTable = {
+	};
+	var biTable = {  
+	};
+/**
+ * 半角カタカナを全角カタカナに変換
+ * 
+ * @param {String} str 変換したい文字列
+ */
+	var uniTable = {
+        'ｶﾞ': 'ガ', 'ｷﾞ': 'ギ', 'ｸﾞ': 'グ', 'ｹﾞ': 'ゲ', 'ｺﾞ': 'ゴ',
+        'ｻﾞ': 'ザ', 'ｼﾞ': 'ジ', 'ｽﾞ': 'ズ', 'ｾﾞ': 'ゼ', 'ｿﾞ': 'ゾ',
+        'ﾀﾞ': 'ダ', 'ﾁﾞ': 'ヂ', 'ﾂﾞ': 'ヅ', 'ﾃﾞ': 'デ', 'ﾄﾞ': 'ド',
+        'ﾊﾞ': 'バ', 'ﾋﾞ': 'ビ', 'ﾌﾞ': 'ブ', 'ﾍﾞ': 'ベ', 'ﾎﾞ': 'ボ',
+        'ﾊﾟ': 'パ', 'ﾋﾟ': 'ピ', 'ﾌﾟ': 'プ', 'ﾍﾟ': 'ペ', 'ﾎﾟ': 'ポ',
+        'ｳﾞ': 'ヴ', 'ﾜﾞ': 'ヷ', 'ｦﾞ': 'ヺ',
+        'ｱ': 'ア', 'ｲ': 'イ', 'ｳ': 'ウ', 'ｴ': 'エ', 'ｵ': 'オ',
+        'ｶ': 'カ', 'ｷ': 'キ', 'ｸ': 'ク', 'ｹ': 'ケ', 'ｺ': 'コ',
+        'ｻ': 'サ', 'ｼ': 'シ', 'ｽ': 'ス', 'ｾ': 'セ', 'ｿ': 'ソ',
+        'ﾀ': 'タ', 'ﾁ': 'チ', 'ﾂ': 'ツ', 'ﾃ': 'テ', 'ﾄ': 'ト',
+        'ﾅ': 'ナ', 'ﾆ': 'ニ', 'ﾇ': 'ヌ', 'ﾈ': 'ネ', 'ﾉ': 'ノ',
+        'ﾊ': 'ハ', 'ﾋ': 'ヒ', 'ﾌ': 'フ', 'ﾍ': 'ヘ', 'ﾎ': 'ホ',
+        'ﾏ': 'マ', 'ﾐ': 'ミ', 'ﾑ': 'ム', 'ﾒ': 'メ', 'ﾓ': 'モ',
+        'ﾔ': 'ヤ', 'ﾕ': 'ユ', 'ﾖ': 'ヨ',
+        'ﾗ': 'ラ', 'ﾘ': 'リ', 'ﾙ': 'ル', 'ﾚ': 'レ', 'ﾛ': 'ロ',
+        'ﾜ': 'ワ', 'ｦ': 'ヲ', 'ﾝ': 'ン',
+        'ｧ': 'ァ', 'ｨ': 'ィ', 'ｩ': 'ゥ', 'ｪ': 'ェ', 'ｫ': 'ォ',
+        'ｯ': 'ッ', 'ｬ': 'ャ', 'ｭ': 'ュ', 'ｮ': 'ョ',
+        '｡': '。', '､': '、', 'ｰ': 'ー', '｢': '「', '｣': '」', '･': '・'
+	};
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+	if(triTable[string] !== undefined){
+        return triTable[string];
+	} else if(biTable[string] !== undefined) {
+        return biTable[string];
+	}
 
-```markdown
-Syntax highlighted code block
+    var biCheck = new Object();
+    for (var k in biTable){
+        var tmp = k.split('');
+        biCheck[tmp[0]] = true;
+    }
 
-# Header 1
-## Header 2
-### Header 3
+    var triCheck = new Object();
+    for (var tk in triTable){
+        var tmp = tk.split('');
+        triCheck[tmp[0] + tmp[1]] = true;
+        biCheck[tmp[0]] = true; 
+    }
+    
 
-- Bulleted
-- List
+	var buf = '';
+	for(var i = 0; i < arrayedString.length ; i++){
+        var str = arrayedString[i];
+        buf += str;
+        if(buf.length == 3){
+            if(triTable[buf] !== undefined){
+                value += triTable[buf];
+            } else {
+                tmp = buf.split('');
+                value += biTable[tmp[0] + tmp[1]];
+                value += uniTable[tmp[2]] === undefined ? tmp[2] : uniTable[tmp[2]];
+                
+            }
 
-1. Numbered
-2. List
+        } else if(buf.length == 2) {
+            if(triCheck[buf] !== undefined) { 
+            } else if(biTable[buf] !== undefined) {
+                    value += biTable[buf];
+                    buf = '';
+                } else {
+                    tmp = buf.split('');
+                    value += uniTable[tmp[0]]; 
+                    value += uniTable[tmp[1]] === undefined ? tmp[1] : uniTable[tmp[1]]; 
+                    buf = '';
+                } 
+        } else if(biCheck[buf] !== undefined){
+        } else { 
+                value += uniTable[str] === undefined ? str : uniTable[str];
+                buf = '';
+        }
 
-**Bold** and _Italic_ and `Code` text
 
-[Link](url) and ![Image](src)
-```
+        }
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+        value += buf !== '' ? uniTable[buf] : '';
 
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/color007/teppei-spreadsheet/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+    value = value.replace(/([aiueo])ー/gi,'$1');
+	return value;
+}
